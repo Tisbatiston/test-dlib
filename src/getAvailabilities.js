@@ -29,6 +29,9 @@ export default async function getAvailabilities (date) {
     }) 
 }
 
+/**
+ * Represents the list (Array) of availabilities for the given week
+ */
 class AvailabilitiesDayList {
   constructor (periodStart, events) {
     this._availabities = []
@@ -119,6 +122,9 @@ class AvailabilitiesDayList {
   }
 }
 
+/**
+ * Represents a day in the given week
+ */
 class AvailabilityDay {
   constructor (date) {
     this.momentObj = moment(date)
