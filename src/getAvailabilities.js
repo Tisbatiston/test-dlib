@@ -1,6 +1,7 @@
 import moment from 'moment'
 import knex from 'knexClient'
 import AvailabilitiesDayList from './AvailabilitiesDayList'
+
 /**
  * Returns availabilities for the 7 days following the given date
  * @param {Date} date 
@@ -16,8 +17,8 @@ export default async function getAvailabilities (date) {
     .where(function () {
       this.where('starts_at', '<=', periodEnd.format('x')).andWhere('ends_at', '>=', periodStart.format('x'))
     })
-    .orWhere({
-      weekly_recurring: true
+    .orWhere(function() {
+      this.where('weekly_recurring', true).andWhere('starts_at', '<', periodEnd.format('x'))
     }).then((events) => {
       const list = new AvailabilitiesDayList(periodStart, events)
       return list.toDoctolibTestFormat()

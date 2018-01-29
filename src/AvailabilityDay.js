@@ -22,10 +22,11 @@ export default class AvailabilityDay {
       const endOfDay = moment(this.momentObj).endOf('day')
       while (time < endOfDay) {
         if (time.isBetween(moment(event.starts_at), moment(event.ends_at), null, '[)')) {
-          const currentSlot = time.format('HH:mm')
-          if (!this._events[event.kind].includes(currentSlot)) {
-            this._events[event.kind].push(currentSlot)
-          }
+            const formattedTime = time.format('HH:mm')
+            const currentSlot = !formattedTime.indexOf('0') ? formattedTime.substring(1) : formattedTime
+            if (!this._events[event.kind].includes(currentSlot)) {
+                this._events[event.kind].push(currentSlot)
+            }
         }
         time.add('30', 'minute')
       }

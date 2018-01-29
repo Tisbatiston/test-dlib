@@ -34,7 +34,7 @@ describe('getAvailabilities', () => {
         String(new Date('2014-08-11')),
       )
       expect(availabilities[1].slots).toEqual([
-        '09:30',
+        '9:30',
         '10:00',
         '11:30',
         '12:00',
@@ -90,5 +90,24 @@ describe('getAvailabilities', () => {
         expect(e.message).toBe('Invalid date supplied')
       }
     })
+  })
+
+  describe('Future cases', () => {
+    beforeEach(async () => {
+      await knex('events').insert([
+        {
+          kind: 'opening',
+          starts_at: new Date('2018-12-03 06:00'),
+          ends_at: new Date('2018-12-03 22:00'),
+          weekly_recurring: true
+        }
+      ])
+    })
+
+    it('should not retrieve future weekly_recurring events', async () => {
+      const availabilities = await getAvailabilities(new Date('2018-01-29'))
+      expect(availabilities[0].slots).toEqual([])
+    })
+
   })
 })
